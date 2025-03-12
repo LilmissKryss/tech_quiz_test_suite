@@ -6,13 +6,11 @@ export const getQuestions = async (): Promise<Question[]> => {
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
-    const question: Question = await response.json();
-    console.log("Fetched question:", question);
-
-    // Ensure the response is wrapped in an array
-    return question ? [question] : [];
+    const data: Question[] = await response.json();
+    console.log("Fetched questions:", data);
+    return Array.isArray(data) ? data : [];
   } catch (error) {
-    console.error("Failed to fetch question:", error);
+    console.error("Failed to fetch questions:", error);
     throw error;
   }
 };

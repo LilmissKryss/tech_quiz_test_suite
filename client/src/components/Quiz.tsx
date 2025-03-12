@@ -1,6 +1,6 @@
-import { useState } from "react";
-import type { Question } from "../models/Question.js";
-import { getQuestions } from "../services/questionApi.js";
+import { useState, useEffect } from "react";
+import { getQuestions } from "../services/questionApi";
+import { Question } from "../models/Question";
 
 const Quiz = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -10,20 +10,23 @@ const Quiz = () => {
   const [quizStarted, setQuizStarted] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (quizStarted) {
+      getRandomQuestions();
+    }
+  }, [quizStarted]);
+
   const getRandomQuestions = async () => {
     try {
       setLoading(true);
       console.log("Fetching questions...");
       const questions = await getQuestions();
       console.log("Questions received:", questions);
-      console.log("Number of questions loaded:", questions.length);
 
-      if (!questions) {
-        throw new Error("something went wrong!");
+      if (questions.length === 0) {
+        throw new Error("No questions available!");
       }
-
       setQuestions(questions);
-      setQuizStarted(true);
     } catch (err) {
       console.error(err);
     } finally {
@@ -37,8 +40,6 @@ const Quiz = () => {
     }
 
     const nextQuestionIndex = currentQuestionIndex + 1;
-
-    // Check if there are more questions left
     if (nextQuestionIndex < questions.length) {
       setCurrentQuestionIndex(nextQuestionIndex);
     } else {
@@ -50,7 +51,7 @@ const Quiz = () => {
     setQuizCompleted(false);
     setScore(0);
     setCurrentQuestionIndex(0);
-    await getRandomQuestions();
+    setQuizStarted(true);
   };
 
   if (loading) {
@@ -93,13 +94,26 @@ const Quiz = () => {
     );
   }
 
-  const currentQuestion = questions[currentQuestionIndex];
-
-  // safety check if there are no questions
-  if (!currentQuestion) {
+  // Check if questions have been loaded properly
+  if (!questions || questions.length === 0) {
     return (
       <div className="alert alert-warning">
-        No question available. Please try again.
+        No questions available. Please try again later.
+      </div>
+    );
+  }
+
+  const currentQuestion = questions[currentQuestionIndex];
+
+  // Check if the current question exists
+  if (
+    !currentQuestion ||
+    !currentQuestion.answers ||
+    !Array.isArray(currentQuestion.answers)
+  ) {
+    return (
+      <div className="alert alert-warning">
+        No answers available for this question. Please try again.
       </div>
     );
   }
