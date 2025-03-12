@@ -1,5 +1,5 @@
 import express from "express";
-import questionRoutes from "./questionRoutes.js"; // Note the .js extension
+import questionRoutes from "./questionRoutes.js";
 
 const router = express.Router();
 

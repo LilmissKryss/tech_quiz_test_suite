@@ -28,14 +28,13 @@ const server = app.listen(PORT, () => {
 
 // shutdown
 process.on("SIGINT", () => {
-  console.log("Received SIGINT. Shutting down gracefully...");
+  console.log("Shutting down server...");
   server.close(() => {
     console.log("Server closed.");
     process.exit(0);
   });
 });
 
-// Optional: Handle unhandled promise rejections
 process.on("unhandledRejection", (error) => {
   console.error("Unhandled promise rejection:", error);
 });
