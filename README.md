@@ -98,7 +98,9 @@ Run tests using npm run test
 
 ## Video Walkthrough
 
-Check out the demo video of the Tech Quiz App in action
+Check out the demo video of the Tech Quiz App in action:
+
+https://www.dropbox.com/scl/fi/6zdzvsqs3kcixwtdkktxd/Tech_Quiz_walkthrough.mov?rlkey=8zmowq807d2ch8upq5sp94pur&st=nn539dkv&dl=0
 
 ## Contributing
 
